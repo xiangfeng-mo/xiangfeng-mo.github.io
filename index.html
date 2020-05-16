@@ -110,29 +110,15 @@
 
       
       <h3 id="FileStream"><a href="#FileStream" class="headerlink" title="FileStream"></a>FileStream</h3><p>Unity读写文件都使用到FileStream类，用于打开某一个文件</p>
-<p>(<code>)
-    public FileStream(string path, FileMode mode, FileAccess access)
-    {
-    }
-(</code>)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public FileStream(string path, FileMode mode, FileAccess access)</span><br><span class="line">   &#123;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
 <p>path：读写文件所在的路径，Unity下默认为 Assets/ + &lt;文件名&gt;.&lt;类型&gt;, 通过类型后缀即可读取不同类型的文件。</p>
 <p>mode：选择打开文件的类型，如FileMode.OpenOrCreate 就是打开或者创建一个&lt;文件名&gt;的文件。</p>
 <p>access：声明操作类型，读Read，写Write。</p>
 <h3 id="写文件"><a href="#写文件" class="headerlink" title="写文件"></a>写文件</h3><p>结合StreamWriter可用于对打开的FileStream进行写操作。</p>
 <p>以CSV文件为例，可用StreamWriter.WriteLine 将文本按行写进FileStream中。列与列之间的分割可用“,”表示，如 WriteLine(“col1”, + “,” + “col2”)；这样就在csv文件中写入了两列。</p>
 <p><img src="/images/CSVWrite.png" alt=""></p>
-<p>(```)<br>    public static void TestWrite()<br>    {</p>
-<pre><code>    FileStream fs = new FileStream(&quot;Test.csv&quot;, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-    StreamWriter sw = new StreamWriter(fs);
-    sw.WriteLine(&quot;col1,col2&quot;);
-    for(;;)
-    {
-        //循环写入逻辑
-    }
-
-    sw.Close();  //必须使用Close()，否则写出的东西可能不完整。
-
-}</code></pre><p>(```)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public static void TestWrite()</span><br><span class="line">&#123;</span><br><span class="line">       </span><br><span class="line">	FileStream fs &#x3D; new FileStream(&quot;Test.csv&quot;, FileMode.OpenOrCreate, FileAccess.ReadWrite);</span><br><span class="line">	StreamWriter sw &#x3D; new StreamWriter(fs);</span><br><span class="line">	sw.WriteLine(&quot;col1,col2&quot;);</span><br><span class="line">	for(;;)</span><br><span class="line">	&#123;</span><br><span class="line">		&#x2F;&#x2F;循环写入逻辑</span><br><span class="line">	&#125;</span><br><span class="line">           </span><br><span class="line">	sw.Close();  &#x2F;&#x2F;必须使用Close()，否则写出的东西可能不完整。</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
       <!-- reward -->
