@@ -70,6 +70,76 @@
     
     
     
+    <article id="unity-Prefab理解" class="article article-type-unity" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/02/24/Prefab%E7%90%86%E8%A7%A3/"
+    >Prefab理解</a
+  >
+</h2>
+  
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2021/02/24/Prefab%E7%90%86%E8%A7%A3/" class="article-date">
+  <time datetime="2021-02-24T04:21:07.000Z" itemprop="datePublished">2021-02-24</time>
+</a>
+      
+      
+      
+      
+    </div>
+    
+
+    
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+      <h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>是Unity中的一种资源类型，可被反复利用。美术人员将一个游戏对象封装成prefab，前端可以把这个prefab克隆到游戏场景中，这个过程是prefab的实例化。</p>
+<p>prefab实例化之后的克隆体就称为该prefab的实例化对象。一个prefab可以有多个实例化对象，当对prefab进行改动时，所有的对象也会相应的改变。</p>
+<h3 id="嵌套"><a href="#嵌套" class="headerlink" title="嵌套"></a>嵌套</h3><p>prefab之间可以嵌套。换句话说，就是prefab A的实例化对象可以内嵌在prefab B上，此时的prefab A的实例化对象是一个内嵌prefab对象（nested prefab）。<br><img src="/images/prefab_understanding/nested_prefab.png" alt=""></p>
+<p>在prefab模式下对prefab A的改动，prefab B中的内嵌prefab A对象也会随之变动。但对内嵌prefab A对象的改动，可以和prefab A不一样，这可以通过overrides应用到prefab A，也可以通过overrides还原到与prefab A一样的模式。<br><img src="/images/prefab_understanding/nested_prefab_overrides.png" alt=""></p>
+
+      
+      <!-- reward -->
+      
+    </div>
+    
+    
+      <!-- copyright -->
+      
+    <footer class="article-footer">
+      
+      
+
+    </footer>
+
+  </div>
+
+  
+
+  
+  
+  
+
+  
+
+</article>
+    
     <article id="post-Unity读写文件" class="article article-type-post" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
@@ -243,7 +313,7 @@
     <ul class="list-inline">
       <li>
         &copy;
-        2015-2020
+        2015-2021
         John Doe
       </li>
       <li>
