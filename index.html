@@ -70,6 +70,94 @@
     
     
     
+    <article id="post-NGUI之UIRoot" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/03/10/NGUI%E4%B9%8BUIRoot/"
+    >NGUI之UIRoot</a
+  >
+</h2>
+  
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2021/03/10/NGUI%E4%B9%8BUIRoot/" class="article-date">
+  <time datetime="2021-03-10T04:39:07.000Z" itemprop="datePublished">2021-03-10</time>
+</a>
+      
+      
+      
+      
+    </div>
+    
+
+    
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+      <p>UIRoot 是NGUI的UI组件的根节点，主要负责缩放适配、发送事件的功能。这里主要讲讲UIRoot的缩放方式。</p>
+<h2 id="缩放方式-（Scaling"><a href="#缩放方式-（Scaling" class="headerlink" title="缩放方式 （Scaling)"></a>缩放方式 （Scaling)</h2><p>UIRoot 的缩放方式有三种：Flexible、Constrained、ConstrainedOnMobiles</p>
+<h3 id="Flexible"><a href="#Flexible" class="headerlink" title="Flexible"></a>Flexible</h3><blockquote>
+<p>Flexible style lets your UI always be in pixels, and a 300x200 widget will always take 300 by 200 pixels on the screen. This also means that viewing your UI on a low-res device will make your widgets appear rather large in size, and viewing your UI on a high-res device will make your widgets appear small. On the plus side, with this setting your UI will always remain as crisp as possible.</p>
+</blockquote>
+<p>也就是，UI元素将保持原有大小尺寸不变，不进行缩放处理。</p>
+<h3 id="Constrained"><a href="#Constrained" class="headerlink" title="Constrained"></a>Constrained</h3><blockquote>
+<p>Constrained is the exact opposite of that. When the UIRoot is set to this setting, your screen will always remain the same size as far as NGUI is concerned, regardless of the actual screen size. This means that if a 300x200 widget takes 25% of your screen with the resolution of 1920x1080, it will still take 25% of the screen when you drop your resolution to 1280x720. If you don’t want to worry about how your UI will look at different screen sizes and you don’t care much about making it as crisp as possible, choose this setting. Don’t forget to set the Content dimensions setting when choosing this option.</p>
+</blockquote>
+<blockquote>
+<p>You can further refine the constrain by choosing whether the content will Fit on the screen or whether it will Fill the screen (when ‘fit’ is off). Think of it as your Desktop wallpaper. When you choose the Fit method, the wallpaper will always be fully visible on the screen, where if you go with a Fill method, it will always completely fill the screen while maintaining its aspect ratio. Same idea here. See the attached image for more information.</p>
+</blockquote>
+<p>通俗的说就是按比例进行缩放，而不管实际的分辨率是多少。例如 300x200 的widget，在分辨率为1920x1080的环境下，空间占用率为25%，那么这个缩放比例就是25%，如果此时将环境分辨率调为1280x720，那原来的widget还是会按照25%的缩放比例进行缩放。</p>
+<p>在这种缩放方式下，又细分出两种缩放方法:Fit 和 Fill。</p>
+<p>1、Fit就是使得UI尽可能都嵌入在屏幕内。Fit之下还可进行按横向fit还是纵向fit，或者横向和纵向都fit。</p>
+<p>2、Fill让屏幕内填满UI，没有空余的部分。</p>
+<p>使用下图会明白这个意思。<br><img src="/images/NGUI/UIRoot_fix_and_fill.png" alt=""></p>
+<h3 id="ConstrainedOnMobiles"><a href="#ConstrainedOnMobiles" class="headerlink" title="ConstrainedOnMobiles"></a>ConstrainedOnMobiles</h3><blockquote>
+<p>ConstrainedOnMobiles setting is a combination of the two. It will behave as if the setting was “Flexible” on desktop builds, and it will act as if the size was “Constrained” when targeting mobile platforms.</p>
+</blockquote>
+<p>ConstrainedOnMobiles是上述两种模式的结合，在电脑桌面下使用Flexible模式，而在手机上使用Constrained模式。</p>
+<h2 id="activeHeight"><a href="#activeHeight" class="headerlink" title="activeHeight"></a>activeHeight</h2><p>说完了缩放方式，就可以理解这个值的含义了。基于不同的缩放方式，activeHeight得出不同UI高度。这在处理某些UI分辨率适配问题时会非常有用。如获取UI边界的屏幕坐标，需要进行UI边界大小到屏幕坐标的转换时，如果直接进行转换，可能会因为缩放问题而得到一个错误的值。</p>
+
+      
+      <!-- reward -->
+      
+    </div>
+    
+    
+      <!-- copyright -->
+      
+    <footer class="article-footer">
+      
+      
+
+    </footer>
+
+  </div>
+
+  
+
+  
+  
+  
+
+  
+
+</article>
+    
     <article id="unity-Prefab理解" class="article article-type-unity" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
