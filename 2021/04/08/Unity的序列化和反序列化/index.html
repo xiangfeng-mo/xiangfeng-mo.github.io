@@ -6,7 +6,7 @@
     
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>
-    C# 装箱与拆箱 |  晓风
+    Unity的序列化和反序列化 |  晓风
   </title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   
@@ -31,7 +31,7 @@
   <div id="app">
     <main class="content">
       <section class="outer">
-  <article id="post-C# 装箱与拆箱" class="article article-type-post" itemscope
+  <article id="post-Unity的序列化和反序列化" class="article article-type-post" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -39,7 +39,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  C# 装箱与拆箱
+  Unity的序列化和反序列化
 </h1>
   
 
@@ -48,8 +48,8 @@
 
     
     <div class="article-meta">
-      <a href="/2021/04/01/C#%20%E8%A3%85%E7%AE%B1%E4%B8%8E%E6%8B%86%E7%AE%B1/" class="article-date">
-  <time datetime="2021-04-01T05:44:16.000Z" itemprop="datePublished">2021-04-01</time>
+      <a href="/2021/04/08/Unity%E7%9A%84%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" class="article-date">
+  <time datetime="2021-04-07T16:30:16.000Z" itemprop="datePublished">2021-04-08</time>
 </a>
       
       
@@ -59,7 +59,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">494字</span>
+            <span class="post-count">837字</span>
         </span>
     </span>
 
@@ -68,7 +68,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">1分钟</span>
+            <span class="post-count">3分钟</span>
         </span>
     </span>
 </div>
@@ -95,14 +95,29 @@
       
 
       
-      <h2 id="值类型和引用类型"><a href="#值类型和引用类型" class="headerlink" title="值类型和引用类型"></a>值类型和引用类型</h2><p>C#中有两种数据类型，分别是值类型和引用类型。值类型的变量包含类型的实例，而引用类型变量包含的是类型实例的引用。值类型包括像int、long、float、double等声明的字段。而像string、类、接口这些则是引用类型。</p>
-<p>值类型存储在栈内存中，而引用类型存储在堆中。在堆中进行内存分配是比较耗时的。</p>
-<h2 id="装箱和拆箱"><a href="#装箱和拆箱" class="headerlink" title="装箱和拆箱"></a>装箱和拆箱</h2><p>简单来说，装箱就是将值类型转换为引用类型，而拆箱就是将引用类型转换为值类型。C#通过装箱和拆箱的功能将值类型和引用类型联系起来，这便是它的便利之处。这一实现由Object完成，C#的所有类型都可跟Object类型进行转换，但Object本身是一个引用类型。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;装箱</span><br><span class="line">int val &#x3D; 1;</span><br><span class="line">Object obj &#x3D; val;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;拆箱</span><br><span class="line">int num &#x3D; (int)obj;</span><br></pre></td></tr></table></figure>
+      <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>序列化：就是将Unity的数据对象转换成某种文本或者二进制的形式，并保存成本地文件的过程。</p>
+<p>反序列化：将存储有对象信息的某种文本或者二进制文件还原成数据对象的过程。</p>
+<h2 id="意义"><a href="#意义" class="headerlink" title="意义"></a>意义</h2><ol>
+<li>以某种储存形式使得数据对象持久化</li>
+<li>方便将对象从一个地方移动到另一个地方</li>
+<li>使得数据对象不容易直接被篡改</li>
+</ol>
+<h2 id="功能之一，存储脚本数据"><a href="#功能之一，存储脚本数据" class="headerlink" title="功能之一，存储脚本数据"></a>功能之一，存储脚本数据</h2><ol>
+<li><p>Inspector窗口便是将对象中可序列化的信息（并且可被展示）展示出来的一个工具。</p>
+</li>
+<li><p>预制件也是一种序列化文件，在加载预制件的时候，其实就是对其进行反序列化操作。</p>
+</li>
+</ol>
+<h3 id="脚本中哪些成员可以被序列化？"><a href="#脚本中哪些成员可以被序列化？" class="headerlink" title="脚本中哪些成员可以被序列化？"></a>脚本中哪些成员可以被序列化？</h3><p>·         公有的，或者有[SerializeField]属性<br>·        非静态<br>·        非常量<br>·        非只读<br>·        是我们能序列化的类型</p>
+<h3 id="哪些类型可以被序列化？"><a href="#哪些类型可以被序列化？" class="headerlink" title="哪些类型可以被序列化？"></a>哪些类型可以被序列化？</h3><p>·        自定义非抽象类，并且有Serializable属性<br>·        有Serializable属性的自定义结构。（Unity4.5新引入的）<br>·        对继承自UntiyEngine.Object的物体的引用<br>·        原始数据类型(int,float,double,bool,string等等)<br>·        可序列化类型的数组<br>·        可序列化类型组成的List</p>
+<h2 id="可能存在的问题"><a href="#可能存在的问题" class="headerlink" title="可能存在的问题"></a>可能存在的问题</h2><p>序列化在一些非常规条件下，可能会出现问题，例如当序列化空引用对象或者多态类型时。</p>
+<h3 id="空引用"><a href="#空引用" class="headerlink" title="空引用"></a>空引用</h3><p>有两个Serializable的类：A、B。类A中有一个类B对象的空引用。当Unity在对A进行序列化时，会自动构造B类对象来填补这个空引用。这一步有个小坑就是当B类存在基类且基类有不止一个构造函数时，Unity往往不能正确的序列化B的初始值。不过这个问题通常没啥大副作用。但是，当类B就是类A时，另一个无法直视的问题发生了：无限循环。Unity引擎对其有深度限制不会真的无限循环下去，但在达到这个深度前会造成严重卡顿并浪费空间。</p>
+<h3 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h3><p>在一个List<BaseClass>中，列表项实际指向的对象BaseClass的派生类，但Unity序列化时，是不会识别出来的，只会序列化基类的信息。也就是说Unity无法正确序列化多态情况。</p>
+<h2 id="序列化的形式"><a href="#序列化的形式" class="headerlink" title="序列化的形式"></a>序列化的形式</h2><p>序列化的存储形式目前可有多种选择：json、xml、ymal、二进制。<br>Unity默认的资源序列化形式有两种：以ymal为中间格式的文本形式、和二进制形式。但在打包时都会改成二进制形式。二进制模式占用的空间较小。</p>
+<p>以下展示我们手动进行二进制模式的序列化和反序列化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;序列化</span><br><span class="line">private static void SerializeObjects&lt;T&gt;(string path, T[] objects)</span><br><span class="line">&#123;</span><br><span class="line">	var bf &#x3D; new BinaryFormatter();</span><br><span class="line">	var stream &#x3D; new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None);</span><br><span class="line">	bf.Serialize(stream, items);</span><br><span class="line">	stream.Close();</span><br><span class="line"></span><br><span class="line">	EditorUtility.ClearProgressBar();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;反序列</span><br><span class="line">private static T[] DeserializeObjects&lt;T&gt;(string path)</span><br><span class="line">&#123;</span><br><span class="line">	T[] objects &#x3D; null;</span><br><span class="line"></span><br><span class="line">	if (File.Exists(path))</span><br><span class="line">	&#123;</span><br><span class="line">		var bf &#x3D; new BinaryFormatter();</span><br><span class="line">		var stream &#x3D; new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);</span><br><span class="line"></span><br><span class="line">		objects &#x3D; bf.Deserialize(stream) as T[];</span><br><span class="line"></span><br><span class="line">		if (objects &#x3D;&#x3D; null)</span><br><span class="line">		&#123;</span><br><span class="line">			objects &#x3D; new T[0];</span><br><span class="line">			CSFileTools.DeleteFile(path);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		stream.Close();</span><br><span class="line">	&#125;</span><br><span class="line">	else</span><br><span class="line">	&#123;</span><br><span class="line">		objects &#x3D; new T[0];</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	return objects;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>以上便完成了一次装箱拆箱的过程。由于上面代码实现的最终效果是将val赋值给num，如果多了一次装箱拆箱的过程，效率将很低下。所以在这种能避免的情况下，应该避免装箱拆箱操作。</p>
-<h4 id="装箱和拆箱为什么耗时？"><a href="#装箱和拆箱为什么耗时？" class="headerlink" title="装箱和拆箱为什么耗时？"></a>装箱和拆箱为什么耗时？</h4><p>由开头得知，装箱是将存储在栈中的值类型，转换成存储在堆中的引用类型。这就涉及到堆的内存分配，它将包含以下过程：<br>1.检查堆内存的大小，是否足够分配，如果不够，将进行垃圾回收<br>2.内存分配<br>3.检索对应的值类型具体是什么类型，并进行分配。<br>4.将值类型数据拷贝到刚分配内存当中</p>
-<p>可见装箱拆箱操作是有性能消耗的，我们要甄别实际情况，不要做没有必要的装箱拆箱。</p>
+
 
       
       <!-- reward -->
@@ -172,15 +187,13 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://yoursite.com/2021/04/01/C#%20%E8%A3%85%E7%AE%B1%E4%B8%8E%E6%8B%86%E7%AE%B1/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://yoursite.com/2021/04/08/Unity%E7%9A%84%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C#</a></li></ul>
-
 
     </footer>
 
@@ -190,19 +203,10 @@
   
   <nav class="article-nav">
     
-      <a href="/2021/04/08/Unity%E7%9A%84%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" class="article-nav-link">
-        <strong class="article-nav-caption">上一篇</strong>
-        <div class="article-nav-title">
-          
-            Unity的序列化和反序列化
-          
-        </div>
-      </a>
     
-    
-      <a href="/2021/03/31/AssetBundle/" class="article-nav-link">
+      <a href="/2021/04/01/C#%20%E8%A3%85%E7%AE%B1%E4%B8%8E%E6%8B%86%E7%AE%B1/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">理解AssetBundle</div>
+        <div class="article-nav-title">C# 装箱与拆箱</div>
       </a>
     
   </nav>

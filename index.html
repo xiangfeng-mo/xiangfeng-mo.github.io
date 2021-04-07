@@ -70,6 +70,95 @@
     
     
     
+    <article id="post-Unity的序列化和反序列化" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/04/08/Unity%E7%9A%84%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/"
+    >Unity的序列化和反序列化</a
+  >
+</h2>
+  
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2021/04/08/Unity%E7%9A%84%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" class="article-date">
+  <time datetime="2021-04-07T16:30:16.000Z" itemprop="datePublished">2021-04-08</time>
+</a>
+      
+      
+      
+      
+    </div>
+    
+
+    
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+      <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>序列化：就是将Unity的数据对象转换成某种文本或者二进制的形式，并保存成本地文件的过程。</p>
+<p>反序列化：将存储有对象信息的某种文本或者二进制文件还原成数据对象的过程。</p>
+<h2 id="意义"><a href="#意义" class="headerlink" title="意义"></a>意义</h2><ol>
+<li>以某种储存形式使得数据对象持久化</li>
+<li>方便将对象从一个地方移动到另一个地方</li>
+<li>使得数据对象不容易直接被篡改</li>
+</ol>
+<h2 id="功能之一，存储脚本数据"><a href="#功能之一，存储脚本数据" class="headerlink" title="功能之一，存储脚本数据"></a>功能之一，存储脚本数据</h2><ol>
+<li><p>Inspector窗口便是将对象中可序列化的信息（并且可被展示）展示出来的一个工具。</p>
+</li>
+<li><p>预制件也是一种序列化文件，在加载预制件的时候，其实就是对其进行反序列化操作。</p>
+</li>
+</ol>
+<h3 id="脚本中哪些成员可以被序列化？"><a href="#脚本中哪些成员可以被序列化？" class="headerlink" title="脚本中哪些成员可以被序列化？"></a>脚本中哪些成员可以被序列化？</h3><p>·         公有的，或者有[SerializeField]属性<br>·        非静态<br>·        非常量<br>·        非只读<br>·        是我们能序列化的类型</p>
+<h3 id="哪些类型可以被序列化？"><a href="#哪些类型可以被序列化？" class="headerlink" title="哪些类型可以被序列化？"></a>哪些类型可以被序列化？</h3><p>·        自定义非抽象类，并且有Serializable属性<br>·        有Serializable属性的自定义结构。（Unity4.5新引入的）<br>·        对继承自UntiyEngine.Object的物体的引用<br>·        原始数据类型(int,float,double,bool,string等等)<br>·        可序列化类型的数组<br>·        可序列化类型组成的List</p>
+<h2 id="可能存在的问题"><a href="#可能存在的问题" class="headerlink" title="可能存在的问题"></a>可能存在的问题</h2><p>序列化在一些非常规条件下，可能会出现问题，例如当序列化空引用对象或者多态类型时。</p>
+<h3 id="空引用"><a href="#空引用" class="headerlink" title="空引用"></a>空引用</h3><p>有两个Serializable的类：A、B。类A中有一个类B对象的空引用。当Unity在对A进行序列化时，会自动构造B类对象来填补这个空引用。这一步有个小坑就是当B类存在基类且基类有不止一个构造函数时，Unity往往不能正确的序列化B的初始值。不过这个问题通常没啥大副作用。但是，当类B就是类A时，另一个无法直视的问题发生了：无限循环。Unity引擎对其有深度限制不会真的无限循环下去，但在达到这个深度前会造成严重卡顿并浪费空间。</p>
+<h3 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h3><p>在一个List<BaseClass>中，列表项实际指向的对象BaseClass的派生类，但Unity序列化时，是不会识别出来的，只会序列化基类的信息。也就是说Unity无法正确序列化多态情况。</p>
+<h2 id="序列化的形式"><a href="#序列化的形式" class="headerlink" title="序列化的形式"></a>序列化的形式</h2><p>序列化的存储形式目前可有多种选择：json、xml、ymal、二进制。<br>Unity默认的资源序列化形式有两种：以ymal为中间格式的文本形式、和二进制形式。但在打包时都会改成二进制形式。二进制模式占用的空间较小。</p>
+<p>以下展示我们手动进行二进制模式的序列化和反序列化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;序列化</span><br><span class="line">private static void SerializeObjects&lt;T&gt;(string path, T[] objects)</span><br><span class="line">&#123;</span><br><span class="line">	var bf &#x3D; new BinaryFormatter();</span><br><span class="line">	var stream &#x3D; new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None);</span><br><span class="line">	bf.Serialize(stream, items);</span><br><span class="line">	stream.Close();</span><br><span class="line"></span><br><span class="line">	EditorUtility.ClearProgressBar();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;反序列</span><br><span class="line">private static T[] DeserializeObjects&lt;T&gt;(string path)</span><br><span class="line">&#123;</span><br><span class="line">	T[] objects &#x3D; null;</span><br><span class="line"></span><br><span class="line">	if (File.Exists(path))</span><br><span class="line">	&#123;</span><br><span class="line">		var bf &#x3D; new BinaryFormatter();</span><br><span class="line">		var stream &#x3D; new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);</span><br><span class="line"></span><br><span class="line">		objects &#x3D; bf.Deserialize(stream) as T[];</span><br><span class="line"></span><br><span class="line">		if (objects &#x3D;&#x3D; null)</span><br><span class="line">		&#123;</span><br><span class="line">			objects &#x3D; new T[0];</span><br><span class="line">			CSFileTools.DeleteFile(path);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		stream.Close();</span><br><span class="line">	&#125;</span><br><span class="line">	else</span><br><span class="line">	&#123;</span><br><span class="line">		objects &#x3D; new T[0];</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	return objects;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+      
+      <!-- reward -->
+      
+    </div>
+    
+    
+      <!-- copyright -->
+      
+    <footer class="article-footer">
+      
+      
+
+    </footer>
+
+  </div>
+
+  
+
+  
+  
+  
+
+  
+
+</article>
+    
     <article id="post-C# 装箱与拆箱" class="article article-type-post" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
